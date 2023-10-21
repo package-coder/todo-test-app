@@ -16,3 +16,24 @@
 .drawer-overlay {
     flex: 1;
 }
+
+input::placeholder {
+    color: lightgray;
+    opacity: 1;
+}
+input{
+    flex: 1
+}
+
+.input-group-text{
+    background-color: transparent;
+    border-left: 0;
+    border-top: 0;
+    border-radius: 0;
+    border-color: lightgray;
+}
+.form-control:focus {
+    -webkit-box-shadow: none!important;
+        -moz-box-shadow: none!important;
+        box-shadow: none!important;
+    }

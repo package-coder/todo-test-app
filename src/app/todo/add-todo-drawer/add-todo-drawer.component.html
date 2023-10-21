@@ -1,9 +1,38 @@
 <div class="drawer">
-  <div routerLink="/" class="drawer-overlay">
-  
-  </div>
+  <div routerLink="/" class="drawer-overlay"></div>
   <div class="shadow drawer-component px-5 py-5">
-    <h1 class="col" style="font-weight: 700">Todo title</h1>
-    
+    <input
+      type="text"
+      class="form-control mb-4"
+      placeholder="Title"
+      style="border: 0; font-size: xx-large; font-weight: bold; color: black"
+    />
+    <div class="container mb-4">
+      <div class="row mb-3">
+        <label class="col-1 me-3" style="color: lightgray">Tags</label>
+        <div class="col"></div>
+      </div>
+      <div class="row">
+        <label class="col-1 me-3" style="color: lightgray">Date</label>
+        <div class="col"></div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text" >
+        <i class="bi bi-plus-lg m-0" style="color: lightgray;"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Add Task"
+        style="
+          padding: 0;
+          border: 0;
+          border-radius: 0;
+          border-bottom: 1px solid lightgray;
+          color: gray;
+        "
+      />
+    </div>
   </div>
 </div>
