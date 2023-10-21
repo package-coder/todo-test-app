@@ -1,38 +1,68 @@
 <div class="drawer">
   <div routerLink="/" class="drawer-overlay"></div>
   <div class="shadow drawer-component px-5 py-5">
-    <input
-      type="text"
-      class="form-control mb-4"
-      placeholder="Title"
-      style="border: 0; font-size: xx-large; font-weight: bold; color: black"
-    />
-    <div class="container mb-4">
-      <div class="row mb-3">
-        <label class="col-1 me-3" style="color: lightgray">Tags</label>
-        <div class="col"></div>
-      </div>
-      <div class="row">
-        <label class="col-1 me-3" style="color: lightgray">Date</label>
-        <div class="col"></div>
-      </div>
-    </div>
-    <div class="input-group mb-3">
-      <span class="input-group-text" >
-        <i class="bi bi-plus-lg m-0" style="color: lightgray;"></i>
-      </span>
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Add Task"
-        style="
-          padding: 0;
-          border: 0;
-          border-radius: 0;
-          border-bottom: 1px solid lightgray;
-          color: gray;
-        "
-      />
+    <div class="row flex-column justify-content-between h-100">
+      <form
+        class="row flex-column justify-content-between h-100"
+        [formGroup]="form"
+        (ngSubmit)="handleSubmit()"
+      >
+        <div class="col">
+          <input
+            formControlName="name"
+            type="text"
+            class="form-control mb-4"
+            placeholder="Enter todo name"
+            style="
+              border: 0;
+              font-size: xx-large;
+              font-weight: bold;
+              color: black;
+            "
+            required
+          />
+          <div class="container mb-4">
+            <div class="row mb-3">
+              <label class="col-1 me-3" style="color: lightgray">Tags</label>
+              <div class="col" style="color: gray"></div>
+            </div>
+            <div class="row">
+              <label class="col-1 me-3" style="color: lightgray">Date</label>
+              <div class="col" style="color: gray">{{ dateToday }}</div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">
+              <i class="bi bi-plus-lg m-0" style="color: lightgray"></i>
+            </span>
+            <input
+              formControlName="task"
+              type="text"
+              class="form-control"
+              (keypress)="addTask($event)"
+              placeholder="Add Task"
+              style="
+                padding: 0;
+                border: 0;
+                border-radius: 0;
+                border-bottom: 1px solid lightgray;
+                color: gray;
+              "
+            />
+          </div>
+          <div *ngFor="let task of form.get('taskList')?.value">
+            {{ task }}
+          </div>
+        </div>
+
+        <div class="col-1">
+          <footer>
+            <button [disabled]="!form.valid || form.get('taskList')?.value?.length == 0 || submitting" type="submit" class="btn btn-primary btn-sm px-3">
+              {{submitting ? 'Saving...' : 'Save'}}
+            </button>
+          </footer>
+        </div>
+      </form>
     </div>
   </div>
 </div>

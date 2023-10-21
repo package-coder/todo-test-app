@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-todo-card',
@@ -10,6 +11,7 @@ export class TodoCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.todo.createdAt = moment(this.todo.createdAt).format('ddd, MMM DD')
   }
 
 }

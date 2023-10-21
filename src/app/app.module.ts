@@ -9,6 +9,7 @@ import { TodoListComponent } from './todo/todo-list/todo-list.component';
 import { AddTodoDrawerComponent } from './todo/add-todo-drawer/add-todo-drawer.component';
 
 import { TodoService } from 'src/services/todo.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 const routes: Routes = [
@@ -23,8 +24,10 @@ const routes: Routes = [
     AddTodoDrawerComponent
    ],
   imports: [
+    FormsModule,
     BrowserModule,
     HttpClientModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(routes)
   ],
   providers: [

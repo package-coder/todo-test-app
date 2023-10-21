@@ -1,3 +1,6 @@
-<div  *ngFor="let todo of todos" class="row g-2">
-  <app-todo-card class="col-3" [todo]="todo"/>
+<div *ngIf="!fetching" class="row g-2">
+  <app-todo-card class="col-3" *ngFor="let todo of todos" [todo]="todo"/>
+</div>
+<div *ngIf="fetching">
+  Loading...
 </div>
