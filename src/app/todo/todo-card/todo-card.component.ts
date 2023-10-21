@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-todo-card',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./todo-card.component.css']
 })
 export class TodoCardComponent implements OnInit {
-
+  @Input() todo: any;
   constructor() { }
 
   ngOnInit() {

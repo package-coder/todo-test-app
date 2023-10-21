@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http'
+import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { TodoCardComponent } from './todo/todo-card/todo-card.component';
 import { TodoListComponent } from './todo/todo-list/todo-list.component';
-import { Routes, RouterModule, Router } from '@angular/router';
 import { AddTodoDrawerComponent } from './todo/add-todo-drawer/add-todo-drawer.component';
+
+import { TodoService } from 'src/services/todo.service';
 
 
 const routes: Routes = [
@@ -21,9 +24,12 @@ const routes: Routes = [
    ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [
+    TodoService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

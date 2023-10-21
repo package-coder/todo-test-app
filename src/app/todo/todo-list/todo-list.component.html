@@ -1,9 +1,3 @@
-<div class="row g-2">
-  <app-todo-card class="col-3" />
-  <app-todo-card class="col-3" />
-  <app-todo-card class="col-3" />
-  <app-todo-card class="col-3" />
-  <app-todo-card class="col-3" />
-  <app-todo-card class="col-3" />
-  <app-todo-card class="col-3" />
+<div  *ngFor="let todo of todos" class="row g-2">
+  <app-todo-card class="col-3" [todo]="todo"/>
 </div>
