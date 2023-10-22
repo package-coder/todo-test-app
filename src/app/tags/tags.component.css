@@ -1,0 +1,13 @@
+input::placeholder {
+    color: lightgray;
+    opacity: 1;
+}
+input {
+    flex: 1
+}
+
+.form-control:focus {
+    -webkit-box-shadow: none!important;
+        -moz-box-shadow: none!important;
+        box-shadow: none!important;
+    }

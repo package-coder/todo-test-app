@@ -12,6 +12,7 @@ import { TodoDetailDrawerComponent } from './todo/todo-detail-drawer/todo-detail
 import { TodoService } from 'src/services/todo.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaskService } from 'src/services/task.service';
+import { TagsComponent } from './tags/tags.component';
 
 
 const routes: Routes = [
@@ -19,12 +20,13 @@ const routes: Routes = [
   { path: 'todos/:id', component: TodoDetailDrawerComponent },
 ]
 @NgModule({
-  declarations: [		
+  declarations: [
     AppComponent,
+    TagsComponent,
     TodoCardComponent,
     TodoListComponent,
     AddTodoDrawerComponent,
-    TodoDetailDrawerComponent
+    TodoDetailDrawerComponent,
    ],
   imports: [
     FormsModule,
