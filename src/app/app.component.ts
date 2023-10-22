@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'todo-test-app';
+
+
+  showArchives: boolean = false;
+
+  toggleArchive() {
+    this.showArchives = !this.showArchives
+  }
 }

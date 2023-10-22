@@ -1,6 +1,14 @@
 <div *ngIf="!fetching" class="row g-2">
   <app-todo-card class="col-3" *ngFor="let todo of todos" [todo]="todo"/>
 </div>
+<div *ngIf="showArchives">
+  <h1 class="col" style="font-weight: 700; color: lightgrey; margin-top: 120px;">Archived</h1>
+  <hr class="mb-5" style="color: grey;" />
+
+  <div class="row g-2">
+    <app-todo-card class="col-3" *ngFor="let todo of archivedTodos" [todo]="todo"/>
+  </div>
+</div>
 <div *ngIf="fetching">
   Loading...
 </div>

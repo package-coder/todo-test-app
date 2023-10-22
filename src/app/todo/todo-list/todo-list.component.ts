@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TodoService } from 'src/services/todo.service';
 
@@ -11,6 +11,9 @@ export class TodoListComponent implements OnInit {
 
   fetching: boolean = false;
   todos: any[] = []
+  archivedTodos: any[] = []
+
+  @Input() showArchives: boolean = false;
   constructor(private route: ActivatedRoute, private todoService: TodoService) {
   }
 
@@ -25,6 +28,14 @@ export class TodoListComponent implements OnInit {
 
   fetchTodos() {
     this.fetching = true
-    this.todoService.getAllTodo().subscribe(data => this.todos = data, null, () => this.fetching = false)
+    this.todoService.getAllTodo()
+      .subscribe(
+        data => {
+          this.todos = data.filter(data => !data.isArchived)
+          this.archivedTodos = data.filter(data => data.isArchived)
+        }, 
+        null, 
+        () => this.fetching = false
+      )
   }
 }

@@ -43,11 +43,14 @@ input{
         border-radius: 4px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
         cursor: pointer;
     }
     
     .todo-task-complete {
         color: lightgray;
         text-decoration: line-through;
+    }
+
+    .task-parent:hover > .delete-hide {
+        display: block !important;
     }

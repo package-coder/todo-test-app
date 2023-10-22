@@ -10,7 +10,7 @@
         <div class="col">
           <input
             formControlName="name"
-              type="text"
+            type="text"
             class="form-control mb-4"
             placeholder="Enter todo name"
             style="
@@ -50,25 +50,146 @@
               "
             />
           </div>
-          <div *ngFor="let task of form.get('tasks')?.value; let i = index;" class="todo-task py-2 px-3 mb-1" (click)="completeTask(i)" >
-            <div [class]="task.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'">{{ task.name }}</div>
-            <div class="form-check">
-              <input class="form-check-input rounded-circle" type="checkbox" [checked]="task.isCompleted" style="cursor: pointer;">
+          <div
+            class="row flex-row align-items-center task-parent"
+            *ngFor="let task of form.get('tasks')?.value; let i = index"
+          >
+            <div
+              class="col flex-grow-1 todo-task py-2 px-3 mb-1"
+              (click)="completeTask(i)"
+            >
+              <div class="form-check me-3">
+                <input
+                  class="form-check-input rounded-circle"
+                  type="checkbox"
+                  [checked]="task.isCompleted"
+                  style="cursor: pointer"
+                />
+              </div>
+              <div
+                [class]="
+                  task.isCompleted
+                    ? 'todo-task-complete'
+                    : 'todo-task-incomplete'
+                "
+              >
+                {{ task.name }}
+              </div>
+            </div>
+            <div class="delete-hide col-1 px-0 ms-3" style="display: none">
+              <button
+                (click)="archiveTask(i)"
+                class="shadow-sm btn btn-sm rounded"
+              >
+                <i class="bi bi-trash3" style="color: gray"></i>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="showArchivedTasks" style="margin-top: 200px">
+            <h6 style="font-size: x-large; font-weight: bold; color: lightgray">
+              Archived Tasks
+            </h6>
+            <hr class="mb-3" style="color: grey" />
+
+            <div
+              class="row flex-row align-items-center"
+              *ngFor="
+                let task of form.get('archivedTasks')?.value;
+                let i = index
+              "
+            >
+              <div
+                class="col flex-grow-1 todo-task archived-task py-2 px-3 mb-1"
+              >
+                <div class="form-check me-3">
+                  <input
+                    class="form-check-input rounded-circle"
+                    type="checkbox"
+                    [checked]="task.isCompleted"
+                    style="cursor: pointer"
+                  />
+                </div>
+                <div
+                  [class]="
+                    task.isCompleted
+                      ? 'todo-task-complete'
+                      : 'todo-task-incomplete'
+                  "
+                >
+                  {{ task.name }}
+                </div>
+              </div>
+              <div class="col-1 px-0 ms-3">
+                <button
+                  (click)="restoreTask(i)"
+                  class="shadow-sm btn btn-sm rounded"
+                >
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="col-1">
-          <footer>
-            <button *ngIf="form.dirty   " [disabled]="!form.valid || form.get('tasks')?.value?.length == 0 || submitting" type="submit" class="btn btn-primary btn-sm px-3">
-              {{submitting ? 'Saving...' : 'Save'}}
-            </button>
+        <div class="col-1 w-100">
+          <footer class="row align-items-center justify-content-between w-100">
+            <div class="col-1">
+              <button
+                *ngIf="form.dirty"
+                [disabled]="
+                  !form.valid ||
+                  form.get('tasks')?.value?.length == 0 ||
+                  submitting
+                "
+                type="submit"
+                class="btn btn-primary btn-sm px-3"
+              >
+                {{ submitting ? "Saving..." : "Save" }}
+              </button>
+            </div>
+            <div class="col px-0">
+              <div
+                class="d-flex flex-row justify-content-end align-items-center"
+              >
+                <button
+                  (click)="toggleArchivedTasks()"
+                  class="shadow-sm btn btn-sm rounded me-2"
+                  style="color: gray"
+                >
+                  {{ showArchivedTasks ? "Hide" : "Show" }} archives
+                </button>
+                <button
+                  *ngIf="!toggleTodoArchive"
+                  (click)="handleToggleArchive()"
+                  class="shadow-sm btn btn-sm rounded"
+                >
+                  <i class="bi bi-trash3" style="color: gray"></i>
+                </button>
+
+                <div
+                  *ngIf="toggleTodoArchive"
+                  class="d-flex flex-row align-items-center"
+                >
+                  <button
+                    (click)="handleArchiveTodo()"
+                    class="shadow-sm btn btn-sm btn-primary rounded d-flex flex-row me-1"
+                  >
+                    <i class="bi bi-trash3 me-2"></i>
+                    Archive
+                  </button>
+                  <button
+                    (click)="handleToggleArchive()"
+                    class="shadow-sm btn btn-sm btn-secondary rounded d-flex flex-row"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
           </footer>
         </div>
       </form>
     </div>
-    <div *ngIf="loading">
-      Loading...
-    </div>
+    <div *ngIf="loading">Loading...</div>
   </div>
 </div>

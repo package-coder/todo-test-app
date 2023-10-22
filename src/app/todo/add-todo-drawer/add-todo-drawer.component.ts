@@ -49,6 +49,10 @@ export class AddTodoDrawerComponent implements OnInit {
     }
   }
 
+  removeTask(index: number) {
+    
+  }
+
   handleSubmit() {
     this.submitting = true
 

@@ -16,22 +16,30 @@ export class TodoDetailDrawerComponent implements OnInit {
   submitting: boolean = false;
   form!: FormGroup;
 
-  constructor(private route: ActivatedRoute, private todoService: TodoService, private taskService: TaskService) { }
+  toggleTodoArchive: boolean = false;
+  showArchivedTasks: boolean = false;
+
+  constructor(private route: ActivatedRoute, private router: Router, private todoService: TodoService, private taskService: TaskService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => this.fetchTodo(Number(params['id'])));
   }
 
   initForm() {
-    const tasks = this.todo?.tasks?.map((task: any) => new FormControl(task))
+    const tasks = this.todo?.tasks.filter((task: any) => !task.isArchived)?.map((task: any) => new FormControl(task))
+    const archivedTasks = this.todo?.tasks.filter((task: any) => task.isArchived)?.map((task: any) => new FormControl(task))
+
     this.form = new FormGroup({
       tasks: new FormArray(tasks, {
+        validators: [Validators.minLength(1)]
+      }),
+      archivedTasks: new FormArray(archivedTasks, {
         validators: [Validators.minLength(1)]
       }),
       task: new FormControl(),
       name: new FormControl(this.todo?.name, [Validators.required])
     })
-    
+
   }
 
   fetchTodo(todoId: number) {
@@ -51,7 +59,7 @@ export class TodoDetailDrawerComponent implements OnInit {
     if (e?.keyCode == 13) {
       e?.preventDefault()
       const value = e?.target?.value;
-      if(!value) return;
+      if (!value) return;
 
       this.form.get('tasks')?.value?.push({ name: value, isCompleted: false })
       this.form.get('task')?.setValue('')
@@ -62,12 +70,43 @@ export class TodoDetailDrawerComponent implements OnInit {
 
   completeTask(index: number) {
     const task = this.todo?.tasks[index]
-    if(task) {
       task.isCompleted = !task.isCompleted
       this.initForm()
-
       this.taskService.updateTask(task?.id, { ...task }).subscribe()
-    }
+  }
+
+  archiveTask(index: number) {
+    const task = this.form.get('tasks')?.value[index]
+    task.isArchived = true
+    this.initForm()
+
+    this.taskService.updateTask(task?.id, { ...task }).subscribe()
+  }
+
+  restoreTask(index: number) {
+    const task = this.form.get('archivedTasks')?.value[index]
+    task.isArchived = false
+    this.initForm()
+
+    this.taskService.updateTask(task?.id, { ...task }).subscribe()
+  }
+
+  handleToggleArchive() {
+    this.toggleTodoArchive = !this.toggleTodoArchive
+  }
+
+  handleArchiveTodo() {
+    this.todoService.updateTodo(this.todo?.id, { ...this.todo, isArchived: true })
+      .subscribe(
+        () => {
+          this.handleToggleArchive()
+          this.router.navigate(['/'], { queryParams: { "refresh": true } })
+        }
+      )
+  }
+
+  toggleArchivedTasks () {
+    this.showArchivedTasks = !this.showArchivedTasks
   }
 
   handleSubmit() {

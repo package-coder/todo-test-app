@@ -30,4 +30,9 @@ export class TodoService {
     const url = `${env.API_BASE_URL}/${env.API_PATHS.TODO}/${todoId}`
     return this.client.post<any>(url, task);
   }
+
+  updateTodo(todoId: number, todo: any): Observable<any> {
+    const url = `${env.API_BASE_URL}/${env.API_PATHS.TODO}/${todoId}`
+    return this.client.patch<any>(url, todo);
+  }
 }
