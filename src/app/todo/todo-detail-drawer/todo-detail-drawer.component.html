@@ -1,0 +1,74 @@
+<div class="drawer">
+  <div routerLink="/" class="drawer-overlay"></div>
+  <div class="shadow drawer-component px-5 py-5">
+    <div *ngIf="!loading" class="row flex-column justify-content-between h-100">
+      <form
+        class="row flex-column justify-content-between h-100"
+        [formGroup]="form"
+        (ngSubmit)="handleSubmit()"
+      >
+        <div class="col">
+          <input
+            formControlName="name"
+              type="text"
+            class="form-control mb-4"
+            placeholder="Enter todo name"
+            style="
+              border: 0;
+              font-size: xx-large;
+              font-weight: bold;
+              color: black;
+            "
+            required
+          />
+          <div class="container mb-4">
+            <div class="row mb-3">
+              <label class="col-1 me-3" style="color: lightgray">Tags</label>
+              <div class="col" style="color: gray"></div>
+            </div>
+            <div class="row">
+              <label class="col-1 me-3" style="color: lightgray">Date</label>
+              <div class="col" style="color: gray">{{ todo?.createdAt }}</div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">
+              <i class="bi bi-plus-lg m-0" style="color: lightgray"></i>
+            </span>
+            <input
+              formControlName="task"
+              type="text"
+              class="form-control"
+              (keypress)="addTask($event)"
+              placeholder="Add Task"
+              style="
+                padding: 0;
+                border: 0;
+                border-radius: 0;
+                border-bottom: 1px solid lightgray;
+                color: gray;
+              "
+            />
+          </div>
+          <div *ngFor="let task of form.get('tasks')?.value; let i = index;" class="todo-task py-2 px-3 mb-1" (click)="completeTask(i)" >
+            <div [class]="task.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'">{{ task.name }}</div>
+            <div class="form-check">
+              <input class="form-check-input rounded-circle" type="checkbox" [checked]="task.isCompleted" style="cursor: pointer;">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-1">
+          <footer>
+            <button *ngIf="form.dirty   " [disabled]="!form.valid || form.get('tasks')?.value?.length == 0 || submitting" type="submit" class="btn btn-primary btn-sm px-3">
+              {{submitting ? 'Saving...' : 'Save'}}
+            </button>
+          </footer>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="loading">
+      Loading...
+    </div>
+  </div>
+</div>

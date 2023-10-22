@@ -1,0 +1,54 @@
+.drawer {
+    display: flex;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.drawer-component {
+    background-color: white;
+    width: 600px;
+    height: 100%;
+}
+
+.drawer-overlay {
+    flex: 1;
+}
+
+input::placeholder {
+    color: lightgray;
+    opacity: 1;
+}
+input{
+    flex: 1
+}
+
+.input-group-text{
+    background-color: transparent;
+    border-left: 0;
+    border-top: 0;
+    border-radius: 0;
+    border-color: lightgray;
+}
+.form-control:focus {
+    -webkit-box-shadow: none!important;
+        -moz-box-shadow: none!important;
+        box-shadow: none!important;
+    }
+
+
+.todo-task {
+    background-color: rgba(211, 211, 211, 0.18);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.todo-task-complete {
+    color: lightgray;
+    text-decoration: line-through;
+}

@@ -7,21 +7,24 @@ import { AppComponent } from './app.component';
 import { TodoCardComponent } from './todo/todo-card/todo-card.component';
 import { TodoListComponent } from './todo/todo-list/todo-list.component';
 import { AddTodoDrawerComponent } from './todo/add-todo-drawer/add-todo-drawer.component';
+import { TodoDetailDrawerComponent } from './todo/todo-detail-drawer/todo-detail-drawer.component';
 
 import { TodoService } from 'src/services/todo.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TaskService } from 'src/services/task.service';
 
 
 const routes: Routes = [
-  
   { path: 'todos/add', component: AddTodoDrawerComponent },
+  { path: 'todos/:id', component: TodoDetailDrawerComponent },
 ]
 @NgModule({
   declarations: [		
     AppComponent,
     TodoCardComponent,
     TodoListComponent,
-    AddTodoDrawerComponent
+    AddTodoDrawerComponent,
+    TodoDetailDrawerComponent
    ],
   imports: [
     FormsModule,
@@ -31,7 +34,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes)
   ],
   providers: [
-    TodoService
+    TodoService,
+    TaskService
   ],
   bootstrap: [AppComponent]
 })

@@ -15,9 +15,19 @@ export class TodoService {
     const url = `${env.API_BASE_URL}/${env.API_PATHS.TODO}`
     return this.client.get<any[]>(url)
   }
+  
+  getTodo(id: number): Observable<any> {
+    const url = `${env.API_BASE_URL}/${env.API_PATHS.TODO}/${id}`
+    return this.client.get<any>(url)
+  }
 
   saveTodo(todo: any): Observable<any> {
     const url = `${env.API_BASE_URL}/${env.API_PATHS.TODO}`
     return this.client.post<any>(url, todo);
+  }
+
+  addTaskToTodo(todoId: number, task: any): Observable<any> {
+    const url = `${env.API_BASE_URL}/${env.API_PATHS.TODO}/${todoId}`
+    return this.client.post<any>(url, task);
   }
 }
