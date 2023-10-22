@@ -24,7 +24,9 @@
           <div class="container mb-4">
             <div class="row mb-3">
               <label class="col-1 me-3" style="color: lightgray">Tags</label>
-              <div class="col" style="color: gray"></div>
+              <div class="col" style="color: gray">
+                <app-tags formControlName="tagSelector" [defaultValues]="todo.tags" />
+              </div>
             </div>
             <div class="row">
               <label class="col-1 me-3" style="color: lightgray">Date</label>
@@ -36,7 +38,7 @@
               <i class="bi bi-plus-lg m-0" style="color: lightgray"></i>
             </span>
             <input
-              formControlName="task"
+              formControlName="taskInput"
               type="text"
               class="form-control"
               (keypress)="addTask($event)"
@@ -78,6 +80,7 @@
             </div>
             <div class="delete-hide col-1 px-0 ms-3" style="display: none">
               <button
+                type="button"
                 (click)="archiveTask(i)"
                 class="shadow-sm btn btn-sm rounded"
               >
@@ -121,6 +124,7 @@
               </div>
               <div class="col-1 px-0 ms-3">
                 <button
+                  type="button"
                   (click)="restoreTask(i)"
                   class="shadow-sm btn btn-sm rounded"
                 >
@@ -152,6 +156,7 @@
                 class="d-flex flex-row justify-content-end align-items-center"
               >
                 <button
+                  type="button"
                   (click)="toggleArchivedTasks()"
                   class="shadow-sm btn btn-sm rounded me-2"
                   style="color: gray"
@@ -159,6 +164,7 @@
                   {{ showArchivedTasks ? "Hide" : "Show" }} archives
                 </button>
                 <button
+                  type="button"
                   *ngIf="!toggleTodoArchive"
                   (click)="handleToggleArchive()"
                   class="shadow-sm btn btn-sm rounded"
@@ -171,6 +177,7 @@
                   class="d-flex flex-row align-items-center"
                 >
                   <button
+                    type="button"
                     (click)="handleArchiveTodo()"
                     class="shadow-sm btn btn-sm btn-primary rounded d-flex flex-row me-1"
                   >
@@ -178,6 +185,7 @@
                     Archive
                   </button>
                   <button
+                    type="button"
                     (click)="handleToggleArchive()"
                     class="shadow-sm btn btn-sm btn-secondary rounded d-flex flex-row"
                   >
