@@ -20,13 +20,12 @@ export class AddTodoDrawerComponent implements OnInit {
   ngOnInit() {
 
     this.form = new FormGroup({
-      taskList: new FormArray([] as any[], { 
+      tasks: new FormArray([] as any[], { 
         validators: [Validators.minLength(1)]
       }),
       task: new FormControl(),
       name: new FormControl(null, [Validators.required])
-
-    })
+    }) 
 
     this.dateToday = moment().format('dddd, MMMM DD')
   }
@@ -34,8 +33,19 @@ export class AddTodoDrawerComponent implements OnInit {
   addTask(e: any) {
     if(e?.keyCode == 13) {
       e?.preventDefault()
-      this.form.get('taskList')?.value?.push(e?.target?.value)
+      const value = e?.target?.value;
+      if(!value) return;
+
+      this.form.get('tasks')?.value?.push({ name: value, isCompleted: false })
       this.form.get('task')?.setValue('')
+    }
+  }
+
+  
+  completeTask(index: number) {
+    const task = this.form.get('tasks')?.value[index]
+    if(task) {
+      task.isCompleted = !task.isCompleted
     }
   }
 
@@ -43,7 +53,7 @@ export class AddTodoDrawerComponent implements OnInit {
     this.submitting = true
 
     const value = {
-      ...omit(this.form.value, ['task', 'taskList']),
+      ...omit(this.form.value, ['task']),
       createdAt: moment().toISOString()
     }
     this.todoService.saveTodo(value)

@@ -1,7 +1,9 @@
-<div routerLink="/todos/add" class="card shadow-sm rounded" style="border: 1px solid lightgray;">
+<div routerLink="/todos/{{todo.id}}" class="card shadow-sm rounded" style="border: 1px solid lightgray; max-height: 180px; height: 180px;">
   <div class="card-body">
     <h5 class="card-title h6">{{todo.name}}</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <div *ngFor="let task of todo.tasks?.slice(0, 3)" class="card-task px-2 mb-1">
+      <div [class]="task.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'">{{ task.name }}</div>
+    </div>
   </div>
   <div class="card-footer pt-0" style="background-color: transparent; border: 0;">
     <p class="card-text" style="color: lightgray; font-size: smaller;">

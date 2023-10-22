@@ -1,0 +1,16 @@
+
+.card:hover {
+    cursor: pointer;
+    border-color: gray !important;
+}
+
+
+.card-task {
+    background-color: rgba(211, 211, 211, 0.18);
+    border-radius: 4px;
+}
+
+.todo-task-complete {
+    color: lightgray;
+    text-decoration: line-through;
+}   

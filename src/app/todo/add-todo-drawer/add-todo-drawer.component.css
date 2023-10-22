@@ -37,3 +37,17 @@ input{
         -moz-box-shadow: none!important;
         box-shadow: none!important;
     }
+
+    .todo-task {
+        background-color: rgba(211, 211, 211, 0.18);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+    
+    .todo-task-complete {
+        color: lightgray;
+        text-decoration: line-through;
+    }

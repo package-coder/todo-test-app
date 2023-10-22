@@ -50,14 +50,17 @@
               "
             />
           </div>
-          <div *ngFor="let task of form.get('taskList')?.value">
-            {{ task }}
+          <div *ngFor="let task of form.get('tasks')?.value; let i = index;" class="todo-task py-2 px-3 mb-1"  (click)="completeTask(i)">
+            <div [class]="task.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'">{{ task.name }}</div>
+            <div class="form-check">
+              <input class="form-check-input rounded-circle" type="checkbox" [checked]="task.isCompleted" style="cursor: pointer;">
+            </div>
           </div>
         </div>
 
         <div class="col-1">
           <footer>
-            <button [disabled]="!form.valid || form.get('taskList')?.value?.length == 0 || submitting" type="submit" class="btn btn-primary btn-sm px-3">
+            <button [disabled]="!form.valid || form.get('tasks')?.value?.length == 0 || submitting" type="submit" class="btn btn-primary btn-sm px-3">
               {{submitting ? 'Saving...' : 'Save'}}
             </button>
           </footer>
