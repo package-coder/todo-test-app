@@ -22,9 +22,11 @@
             required
           />
           <div class="container mb-4">
-            <div class="row mb-3">
+            <div class="row mb-3 align-items-center">
               <label class="col-1 me-3" style="color: lightgray">Tags</label>
-              <div class="col" style="color: gray"></div>
+              <div class="col" style="color: gray">
+                <app-tags formControlName="tagSelector" />
+              </div>
             </div>
             <div class="row">
               <label class="col-1 me-3" style="color: lightgray">Date</label>
@@ -36,7 +38,7 @@
               <i class="bi bi-plus-lg m-0" style="color: lightgray"></i>
             </span>
             <input
-              formControlName="task"
+              formControlName="taskInput"
               type="text"
               class="form-control"
               (keypress)="addTask($event)"
