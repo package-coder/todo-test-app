@@ -1,6 +1,9 @@
-<div routerLink="/todos/{{todo.id}}" class="card shadow-sm rounded" style="border: 1px solid lightgray; max-height: 180px; height: 180px;">
+<div routerLink="/todos/{{todo.id}}" class="card overflow-y-hidden shadow-sm rounded" style="border: 1px solid lightgray; max-height: 220px; height: 220px;">
   <div class="card-body">
     <h5 class="card-title h6">{{todo.name}}</h5>
+    <div *ngIf="todo.tags.length != 0" class="mb-2">
+      <app-tags [defaultValues]="todo.tags" [readOnly]="true" />
+    </div>
     <div *ngFor="let task of todo.tasks?.slice(0, 3)" class="card-task px-2 mb-1">
       <div [class]="task.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'">{{ task.name }}</div>
     </div>

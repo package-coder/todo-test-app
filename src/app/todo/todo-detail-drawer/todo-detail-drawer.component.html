@@ -8,6 +8,8 @@
         (ngSubmit)="handleSubmit()"
       >
         <div class="col">
+          <h1 *ngIf="todo.isArchived" class="px-2" style="font-weight: 700; font-size: xx-large; color: lightgrey;">Archived</h1>
+
           <input
             formControlName="name"
             type="text"
@@ -30,7 +32,7 @@
             </div>
             <div class="row">
               <label class="col-1 me-3" style="color: lightgray">Date</label>
-              <div class="col" style="color: gray">{{ todo?.createdAt }}</div>
+              <div class="col" style="color: gray">{{ todo?.createdAtFormatted }}</div>
             </div>
           </div>
           <div class="input-group mb-3">
@@ -137,9 +139,9 @@
 
         <div class="col-1 w-100">
           <footer class="row align-items-center justify-content-between w-100">
-            <div class="col-1">
+            <div class="col-3">
               <button
-                *ngIf="form.dirty"
+                *ngIf="form.get('name')?.dirty"
                 [disabled]="
                   !form.valid ||
                   form.get('tasks')?.value?.length == 0 ||
@@ -163,9 +165,20 @@
                 >
                   {{ showArchivedTasks ? "Hide" : "Show" }} archives
                 </button>
+
                 <button
                   type="button"
-                  *ngIf="!toggleTodoArchive"
+                  *ngIf="todo.isArchived"
+                  (click)="handleArchiveTodo()"
+                  class="shadow-sm btn btn-sm rounded"
+                >
+                  <i class="bi bi-plus-lg me-2" style="color: gray"></i>
+                  Restore
+                </button>
+
+                <button
+                  type="button"
+                  *ngIf="!toggleTodoArchive && !todo.isArchived"
                   (click)="handleToggleArchive()"
                   class="shadow-sm btn btn-sm rounded"
                 >
