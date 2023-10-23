@@ -5,6 +5,7 @@ const environment = {
     API_PATHS: {
         TODO: 'todo',
         TASK:'task',
+        TAG:'tag',
     },
     CORS_ORIGIN: ''
 }

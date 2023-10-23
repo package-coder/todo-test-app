@@ -13,6 +13,7 @@ import { TodoService } from 'src/services/todo.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaskService } from 'src/services/task.service';
 import { TagsComponent } from './tags/tags.component';
+import { TagsFilterComponent } from './tags-filter/tags-filter.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
     TagsComponent,
     TodoCardComponent,
     TodoListComponent,
+    TagsFilterComponent,
     AddTodoDrawerComponent,
     TodoDetailDrawerComponent,
    ],

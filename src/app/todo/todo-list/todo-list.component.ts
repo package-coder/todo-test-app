@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TodoService } from 'src/services/todo.service';
 
 @Component({
@@ -19,16 +19,19 @@ export class TodoListComponent implements OnInit {
 
   ngOnInit() {
     this.fetchTodos()
-    this.route.queryParams.subscribe(params => {
-      if(params["refresh"]) {
-        this.fetchTodos()
-      }
+    this.route.queryParamMap.subscribe(params => {
+      const tagId = params.get('tag')
+      const search = params.get('search') as string
+      this.fetchTodos(
+        tagId ? Number(tagId) : undefined, 
+        search
+      )
     });
   }
 
-  fetchTodos() {
+  fetchTodos(tagIdFilter?: number, search?: string) {
     this.fetching = true
-    this.todoService.getAllTodo()
+    this.todoService.getAllTodo(tagIdFilter, search)
       .subscribe(
         data => {
           this.todos = data.filter(data => !data.isArchived)
