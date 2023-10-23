@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaskService } from 'src/services/task.service';
 import { TagsComponent } from './tags/tags.component';
 import { TagsFilterComponent } from './tags-filter/tags-filter.component';
+import { ColorPickerComponent } from './color-picker/color-picker.component';
 
 
 const routes: Routes = [
@@ -21,12 +22,13 @@ const routes: Routes = [
   { path: 'todos/:id', component: TodoDetailDrawerComponent },
 ]
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     TagsComponent,
     TodoCardComponent,
     TodoListComponent,
     TagsFilterComponent,
+    ColorPickerComponent,
     AddTodoDrawerComponent,
     TodoDetailDrawerComponent,
    ],

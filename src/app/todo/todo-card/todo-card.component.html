@@ -4,8 +4,17 @@
     <div *ngIf="todo.tags.length != 0" class="mb-2">
       <app-tags [defaultValues]="todo.tags" [readOnly]="true" />
     </div>
-    <div *ngFor="let task of todo.tasks?.slice(0, 3)" class="card-task px-2 mb-1">
-      <div [class]="task.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'">{{ task.name }}</div>
+    <div  
+      *ngFor="let task of todo.tasks?.slice(0, 3)" 
+      class="card-task px-2 mb-1"
+      [style.background-color]="task.color"
+
+      >
+      <div 
+        [class]="task.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'"
+      >
+        {{ task.name }}
+      </div>
     </div>
   </div>
   <div class="card-footer pt-0" style="background-color: transparent; border: 0;">

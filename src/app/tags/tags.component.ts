@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, forwardRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { snakeCase } from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
 import { TagService } from 'src/services/tag.service';

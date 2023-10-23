@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { snakeCase } from 'lodash';
-import { TagService } from 'src/services/tag.service';
 
 @Component({
   selector: 'app-tags-filter',

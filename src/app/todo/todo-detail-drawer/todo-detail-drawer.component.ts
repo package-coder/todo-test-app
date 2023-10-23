@@ -25,7 +25,8 @@ export class TodoDetailDrawerComponent implements OnInit {
       validators: [Validators.minLength(1)]
     }),
     taskInput: new FormControl(),
-    name: new FormControl('', [Validators.required])
+    name: new FormControl(null, [Validators.required]),
+    colorPicker: new FormControl()
   });
 
   toggleTodoArchive: boolean = false;
@@ -69,6 +70,7 @@ export class TodoDetailDrawerComponent implements OnInit {
     const tasks = this.form.get('tasks') as FormArray
     const taskInput = this.form.get('taskInput') as FormControl
     const todoId = Number(this.route.snapshot.params['id'])
+    const colorPicker = this.form.get('colorPicker')?.value
 
     if (e?.keyCode == 13) {
       e?.preventDefault()
@@ -79,7 +81,7 @@ export class TodoDetailDrawerComponent implements OnInit {
       taskInput.setValue('')
 
       this.taskService
-        .addTodoTask(todoId, { name: value, isCompleted: false })
+        .addTodoTask(todoId, { name: value, isCompleted: false, color: colorPicker?.value })
         .subscribe(data => tasks.push(new FormControl(data)))
     }
   }

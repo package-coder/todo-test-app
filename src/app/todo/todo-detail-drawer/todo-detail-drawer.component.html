@@ -54,16 +54,21 @@
               "
             />
           </div>
+          <div class="mb-4">
+            <app-color-picker formControlName="colorPicker" />
+          </div>
           <div
             class="row flex-row align-items-center task-parent"
             *ngFor="let task of form.get('tasks')?.value; let i = index"
           >
             <div
+              [style.background-color]="task.color"
               class="col flex-grow-1 todo-task py-2 px-3 mb-1"
               (click)="completeTask(i)"
             >
               <div class="form-check me-3">
                 <input
+                  readonly
                   class="form-check-input rounded-circle"
                   type="checkbox"
                   [checked]="task.isCompleted"
@@ -104,10 +109,12 @@
               "
             >
               <div
+                [style.background-color]="task.color"
                 class="col flex-grow-1 todo-task archived-task py-2 px-3 mb-1"
               >
                 <div class="form-check me-3">
                   <input
+                    disabled
                     class="form-check-input rounded-circle"
                     type="checkbox"
                     [checked]="task.isCompleted"

@@ -1,0 +1,17 @@
+<form [formGroup]="colorPicker" class="d-flex flex-row align-items-center justify-content-end">
+  
+  <div *ngFor="let color of colors; let i = index">
+    <button 
+      (click)="handleSelect(i)"
+      type="button" 
+      class="btn btn-lg shadow-sm rounded-circle p-2 me-1"
+      style="border: 2.5px solid white;"
+      [style.background-color]="color"
+      [style.border-color]="i === selectedIndex ? '#0d6efd' : 'white'"
+
+    >
+
+    </button>
+  </div>
+
+</form>

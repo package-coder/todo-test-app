@@ -18,7 +18,8 @@ export class AddTodoDrawerComponent implements OnInit {
     }),
     tagSelector: new FormControl(),
     taskInput: new FormControl<string | null>(null),
-    name: new FormControl(null, [Validators.required])
+    name: new FormControl(null, [Validators.required]),
+    colorPicker: new FormControl()
   }) ;
   submitting: boolean = false;
   dateToday = moment().format('dddd, MMMM DD');
@@ -29,13 +30,15 @@ export class AddTodoDrawerComponent implements OnInit {
   addTask(e: any) {
     const tasks = this.form.get('tasks') as FormArray
     const taskInput = this.form.get('taskInput') as FormControl
+    const colorPicker = this.form.get('colorPicker')?.value
+
 
     if(e?.keyCode == 13) {
       e?.preventDefault()
       const value = e?.target?.value;
       if(!value) return;
 
-      tasks.push(new FormControl({ name: value, isCompleted: false }))
+      tasks.push(new FormControl({ name: value, isCompleted: false, color: colorPicker?.value }))
       taskInput.setValue('')
     }
   }
