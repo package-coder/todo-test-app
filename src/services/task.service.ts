@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 
 import env from 'src/environments/environment.dev'
+import { Task } from 'src/interfaces/task.inteface';
 
 
 @Injectable({
@@ -12,13 +13,13 @@ import env from 'src/environments/environment.dev'
 export class TaskService {
   constructor(private client: HttpClient) { }
 
-  updateTask(taskId: number, task: any): Observable<any> {
+  updateTask(taskId: number, task: Task): Observable<Task> {
     const url = `${env.API_BASE_URL}/${env.API_PATHS.TASK}/${taskId}`
-    return this.client.patch<any>(url, task);
+    return this.client.patch<Task>(url, task);
   }
 
-  addTodoTask(todoId: number, task: any): Observable<any> {
+  addTodoTask(todoId: number, task: Task): Observable<Task> {
     const url = `${env.API_BASE_URL}/${env.API_PATHS.TASK}/todo/${todoId}`
-    return this.client.post<any>(url, task);
+    return this.client.post<Task>(url, task);
   }
 }

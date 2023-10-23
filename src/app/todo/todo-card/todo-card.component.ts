@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { Todo } from 'src/interfaces/todo.inteface';
 
 @Component({
   selector: 'app-todo-card',
@@ -7,7 +8,7 @@ import * as moment from 'moment';
   styleUrls: ['./todo-card.component.css']
 })
 export class TodoCardComponent implements OnInit {
-  @Input() todo: any;
+  @Input() todo!: Todo;
   constructor() { }
 
   ngOnInit() {

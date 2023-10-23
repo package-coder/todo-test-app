@@ -3,7 +3,10 @@ import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGrou
 import { ActivatedRoute } from '@angular/router';
 import { snakeCase } from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
+import { Tag, TagFormControl, TagList } from 'src/interfaces/tag.inteface';
 import { TagService } from 'src/services/tag.service';
+import { TagSelectorFormType } from './tags.interface';
+
 
 @Component({
   selector: 'app-tags',
@@ -24,19 +27,20 @@ import { TagService } from 'src/services/tag.service';
 })
 export class TagsComponent implements OnInit, ControlValueAccessor, Validator, OnDestroy {
   destroySubject = new Subject<void>();
-
-  @Input() defaultValues: any = [];
-  @Input() readOnly: boolean = false;
-  
-  tagSelectorForm = new FormGroup({
-    values: new FormArray<FormControl>([], Validators.minLength(1))
-  })
   toggleAddTag: boolean = false
 
+  @Input() defaultValues?: TagList = [];
+  @Input() readOnly: boolean = false;
+  
+  tagSelectorForm = new FormGroup<TagSelectorFormType>({
+    values: new FormArray<TagFormControl>([], Validators.minLength(1))
+  })
+
   constructor(private route: ActivatedRoute, private tagService: TagService) {}
+  
   ngOnInit() {
-    const tags = this.tagSelectorForm.get('values') as FormArray
-    this.defaultValues.forEach((value: any) => tags.push(new FormControl(value)))
+    const tags = this.tagSelectorForm.get('values') as TagSelectorFormType['values']
+    this.defaultValues?.forEach((tag: Tag) => tags.push(new FormControl(tag)))
   }
 
   toggleAdd() {
@@ -45,16 +49,19 @@ export class TagsComponent implements OnInit, ControlValueAccessor, Validator, O
 
 
   addTag(e: any) {
-    const tags = this.tagSelectorForm.get('values') as FormArray
+    const tags = this.tagSelectorForm.get('values') as TagSelectorFormType['values']
     const todoId = Number(this.route.snapshot.params['id'])
-    
+
     if(e?.keyCode == 13) {
       e?.preventDefault()
       let value = e?.target?.value;
       if(!value) return;
-      if(!tags?.value.some((data: string) => data === snakeCase(value))) {
 
-        const data = { name: snakeCase(value) }
+      value = snakeCase(value)
+
+      if(!tags.value.some((tag: Tag | null) => tag?.name === value)) {
+        const data: Tag = { name: value, isArchived: false }
+
         if(todoId) {
           this.tagService
           .addTodoTag(todoId, data)
@@ -70,7 +77,7 @@ export class TagsComponent implements OnInit, ControlValueAccessor, Validator, O
 
   removeTag(index: number) {
     if(this.readOnly) return;
-    const tags = this.tagSelectorForm.get('values') as FormArray
+    const tags = this.tagSelectorForm.get('values') as TagSelectorFormType['values']
     const todoId = Number(this.route.snapshot.params['id'])
 
     const tag = tags.at(index).value

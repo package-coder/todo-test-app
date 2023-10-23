@@ -2,8 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { TodoService } from 'src/services/todo.service';
-import { omit } from 'lodash'
 import { Router } from '@angular/router';
+import { TodoForm } from 'src/interfaces/todo.inteface';
+import { TaskFormControl, Task } from 'src/interfaces/task.inteface';
+import { TagList } from 'src/interfaces/tag.inteface';
+import { DEFAULT_COLOR } from 'src/app/color-picker/color-picker.component';
+
+interface TodoFormType extends TodoForm {
+  tagSelector: FormControl<{ values: TagList } >
+  taskInput: FormControl<string>
+  colorPicker: FormControl<{ value: string }>
+}
 
 @Component({
   selector: 'app-add-todo-drawer',
@@ -12,24 +21,25 @@ import { Router } from '@angular/router';
 })
 export class AddTodoDrawerComponent implements OnInit {
 
-  form = new FormGroup({
-    tasks: new FormArray<FormControl>([], { 
-      validators: [Validators.minLength(1)]
-    }),
-    tagSelector: new FormControl(),
-    taskInput: new FormControl<string | null>(null),
-    name: new FormControl(null, [Validators.required]),
-    colorPicker: new FormControl()
-  }) ;
   submitting: boolean = false;
   dateToday = moment().format('dddd, MMMM DD');
 
+  form = new FormGroup<TodoFormType>({
+    tasks: new FormArray<TaskFormControl>([], { 
+      validators: [Validators.minLength(1)]
+    }),
+    tagSelector: new FormControl(),
+    taskInput: new FormControl(),
+    name: new FormControl(null, [Validators.required]),
+    colorPicker: new FormControl()
+  }) ;
+  
   constructor(private router: Router, private todoService: TodoService) {}
   ngOnInit() {}
 
   addTask(e: any) {
-    const tasks = this.form.get('tasks') as FormArray
-    const taskInput = this.form.get('taskInput') as FormControl
+    const tasks = this.form.get('tasks') as TodoFormType['tasks']
+    const taskInput = this.form.get('taskInput')
     const colorPicker = this.form.get('colorPicker')?.value
 
 
@@ -38,14 +48,20 @@ export class AddTodoDrawerComponent implements OnInit {
       const value = e?.target?.value;
       if(!value) return;
 
-      tasks.push(new FormControl({ name: value, isCompleted: false, color: colorPicker?.value }))
-      taskInput.setValue('')
+      const data: Task = { 
+        name: value, 
+        isCompleted: false, 
+        isArchived: false,
+        color: colorPicker?.value || DEFAULT_COLOR
+      }
+      tasks.push(new FormControl(data) as TaskFormControl)
+      taskInput?.setValue('')
     }
   }
 
   
   completeTask(index: number) {
-    const tasks = this.form.get('tasks') as FormArray
+    const tasks = this.form.get('tasks') as TodoFormType['tasks']
 
     const task = tasks.value[index]
     if(task) {
@@ -54,7 +70,7 @@ export class AddTodoDrawerComponent implements OnInit {
   }
 
   removeTask(index: number) {
-    const tasks = this.form.get('tasks') as FormArray
+    const tasks = this.form.get('tasks') as TodoFormType['tasks']
     tasks.removeAt(index)
   }
 
@@ -63,9 +79,9 @@ export class AddTodoDrawerComponent implements OnInit {
 
     let data = this.form.value;
     this.todoService.saveTodo({
-      name: data.name,
+      name: data.name as string,
       tasks: data.tasks,
-      tags: data.tagSelector.values,
+      tags: data?.tagSelector?.values || [],
       createdAt: moment().toISOString()
     })
       .subscribe(() => {

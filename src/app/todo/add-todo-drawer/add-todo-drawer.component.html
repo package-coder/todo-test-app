@@ -62,23 +62,23 @@
             <div 
               class="col todo-task py-2 px-3 mb-1" 
               (click)="completeTask(i)"
-              [style.background-color]="task.color"
+              [style.background-color]="task?.color"
             >
               <div class="form-check me-3">
                 <input
                   readonly
                   class="form-check-input rounded-circle"
                   type="checkbox"
-                  [checked]="task.isCompleted"
+                  [checked]="task?.isCompleted"
                   style="cursor: pointer"
                 />
               </div>
               <div
                 [class]="
-                  task.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'
+                  task?.isCompleted ? 'todo-task-complete' : 'todo-task-incomplete'
                 "
               >
-                {{ task.name }}
+                {{ task?.name }}
               </div>
             </div>
             <div class="delete-hide col-1 px-0 ms-3" style="display: none">

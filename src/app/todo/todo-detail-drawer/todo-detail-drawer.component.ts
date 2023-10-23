@@ -2,8 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
+import { DEFAULT_COLOR } from 'src/app/color-picker/color-picker.component';
+import { ColorPickerValueType } from 'src/app/color-picker/color-picker.interface';
+import { TagSelectorValueType } from 'src/app/tags/tags.interface';
+import { Task, TaskFormControl } from 'src/interfaces/task.inteface';
+import { Todo, TodoForm } from 'src/interfaces/todo.inteface';
 import { TaskService } from 'src/services/task.service';
 import { TodoService } from 'src/services/todo.service';
+
+interface TodoFormType extends TodoForm {
+  tagSelector: FormControl<TagSelectorValueType>
+  colorPicker: FormControl<ColorPickerValueType>
+  archivedTasks: FormArray<TaskFormControl>
+  taskInput: FormControl<string | null>
+}
 
 @Component({
   selector: 'app-todo-detail-drawer',
@@ -16,12 +28,12 @@ export class TodoDetailDrawerComponent implements OnInit {
   submitting: boolean = false;
 
   todo: any
-  form = new FormGroup({
-    tasks: new FormArray<FormControl>([], {
+  form = new FormGroup<TodoFormType>({
+    tasks: new FormArray<TaskFormControl>([], {
       validators: [Validators.minLength(1)]
     }),
     tagSelector: new FormControl(),
-    archivedTasks: new FormArray<FormControl>([], {
+    archivedTasks: new FormArray<TaskFormControl>([], {
       validators: [Validators.minLength(1)]
     }),
     taskInput: new FormControl(),
@@ -38,18 +50,18 @@ export class TodoDetailDrawerComponent implements OnInit {
     this.route.params.subscribe(params => this.fetchTodo(Number(params['id'])));
   }
 
-  updateForm(data: any) {
-    const tasksForm = this.form.get('tasks') as FormArray
-    const archivedTasksForm = this.form.get('archivedTasks') as FormArray
+  updateForm(data: Todo) {
+    const tasksForm = this.form.get('tasks') as TodoFormType['tasks']
+    const archivedTasksForm = this.form.get('archivedTasks') as TodoFormType['tasks']
 
-    const tasks = data.tasks.filter((task: any) => !task.isArchived)
-    const archivedTasks = data.tasks.filter((task: any) => task.isArchived)
+    const tasks = data.tasks?.filter((task: any) => !task.isArchived)
+    const archivedTasks = data.tasks?.filter((task: any) => task.isArchived)
 
-    tasks.forEach((task: any) => tasksForm?.push(new FormControl(task)))
-    archivedTasks.forEach((task: any) => archivedTasksForm?.push(new FormControl(task)))
+    tasks?.forEach((task: any) => tasksForm?.push(new FormControl(task)))
+    archivedTasks?.forEach((task: any) => archivedTasksForm?.push(new FormControl(task)))
 
     this.form.get('name')?.setValue(data.name)
-    this.form.get('tagSelector')?.setValue({ values: data.tags })
+    this.form.get('tagSelector')?.setValue({ values: data.tags || null })
     this.todo = {
       ...data,
       createdAtFormatted: moment(data?.createdAt).format('dddd, MMMM DD')
@@ -67,8 +79,8 @@ export class TodoDetailDrawerComponent implements OnInit {
   }
 
   addTask(e: any) {
-    const tasks = this.form.get('tasks') as FormArray
-    const taskInput = this.form.get('taskInput') as FormControl
+    const tasks = this.form.get('tasks') as TodoFormType['tasks']
+    const taskInput = this.form.get('taskInput')
     const todoId = Number(this.route.snapshot.params['id'])
     const colorPicker = this.form.get('colorPicker')?.value
 
@@ -78,49 +90,61 @@ export class TodoDetailDrawerComponent implements OnInit {
       const value = e?.target?.value;
       if (!value) return;
 
-      taskInput.setValue('')
+      taskInput?.setValue('')
 
+      const data: Task = { 
+        name: value, 
+        isCompleted: false, 
+        isArchived: false,
+        color: colorPicker?.value || DEFAULT_COLOR
+      }
       this.taskService
-        .addTodoTask(todoId, { name: value, isCompleted: false, color: colorPicker?.value })
-        .subscribe(data => tasks.push(new FormControl(data)))
+        .addTodoTask(todoId, data)
+        .subscribe(data => tasks.push(new FormControl(data) as TaskFormControl))
     }
   }
 
   completeTask(index: number) {
-    const tasks = this.form.get('tasks') as FormArray
+    const tasks = this.form.get('tasks') as TodoFormType['tasks']
     const task = tasks.at(index).value
 
+    if (!(task && task.id)) return;
+
     task.isCompleted = !task.isCompleted
-    this.taskService
-      .updateTask(task.id, { ...task })
-      .subscribe()
+      this.taskService
+        .updateTask(task.id, { ...task })
+        .subscribe()
   }
 
   archiveTask(index: number) {
-    const tasks = this.form.get('tasks') as FormArray
+    const tasks = this.form.get('tasks') as TodoFormType['tasks']
     const taskControl = tasks.at(index)
     const task = taskControl.value
+
+    if (!(task && task.id)) return;
 
     task.isArchived = true
     this.taskService
       .updateTask(task.id, { ...task })
       .subscribe(() => {
-        const archivedTasks = this.form.get('archivedTasks') as FormArray
+        const archivedTasks = this.form.get('archivedTasks') as TodoFormType['tasks']
         archivedTasks.push(taskControl)
         tasks.removeAt(index)
       })
   }
 
   restoreTask(index: number) {
-    const archivedTasks = this.form.get('archivedTasks') as FormArray
+    const archivedTasks = this.form.get('archivedTasks') as TodoFormType['tasks']
     const taskControl = archivedTasks.at(index)
     const task = taskControl.value
+
+    if (!(task && task.id)) return;
 
     task.isArchived = false
     this.taskService
       .updateTask(task.id, { ...task })
       .subscribe(() => {
-        const tasks = this.form.get('tasks') as FormArray
+        const tasks = this.form.get('tasks') as TodoFormType['tasks']
         tasks.push(taskControl)
         archivedTasks.removeAt(index)
       })
@@ -151,7 +175,7 @@ export class TodoDetailDrawerComponent implements OnInit {
     const todoId = Number(this.route.snapshot.params['id'])
 
     let data = this.form.value;
-    this.todoService.updateTodo(todoId, { name: data.name, createdAt: this.todo.createdAt })
+    this.todoService.updateTodo(todoId, { name: data.name as string, createdAt: this.todo.createdAt })
       .subscribe(() => {
         this.submitting = false
         this.router.navigate(['/'], { queryParams: { "refresh": true } })

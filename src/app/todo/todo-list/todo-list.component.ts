@@ -1,17 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Todo, TodoList } from 'src/interfaces/todo.inteface';
 import { TodoService } from 'src/services/todo.service';
 
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.css']
+  styleUrls: []
 })
 export class TodoListComponent implements OnInit {
 
   fetching: boolean = false;
-  todos: any[] = []
-  archivedTodos: any[] = []
+  todos?: TodoList = []
+  archivedTodos?: TodoList = []
 
   @Input() showArchives: boolean = false;
   constructor(private route: ActivatedRoute, private todoService: TodoService) {

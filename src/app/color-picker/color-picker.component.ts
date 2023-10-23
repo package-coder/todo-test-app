@@ -2,7 +2,9 @@ import { Component, OnDestroy, OnInit, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, Validator, ControlValueAccessor } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+import { ColorPickerFormType } from './color-picker.interface';
 
+export const DEFAULT_COLOR = 'rgba(211, 211, 211, 0.18)'
 @Component({
   selector: 'app-color-picker',
   templateUrl: './color-picker.component.html',
@@ -24,7 +26,7 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor, Valid
   destroySubject = new Subject<void>();
 
   colors: string[] = [
-    'lightgray',
+    DEFAULT_COLOR,
     'rgba(249, 180, 171, 0.18)',
     'rgba(38, 78, 112, 0.18)',
     'rgba(103, 145, 134, 0.18)',
@@ -33,13 +35,13 @@ export class ColorPickerComponent implements OnInit, ControlValueAccessor, Valid
   ]
   selectedIndex: number = 0
 
-  colorPicker = new FormGroup({
-    value: new FormControl(this.colors[this.selectedIndex])
+  colorPicker = new FormGroup<ColorPickerFormType>({
+    value: new FormControl(DEFAULT_COLOR)
   })
 
   constructor() { }
   ngOnInit() {
-    this.colorPicker.get('value')?.setValue(this.colors[this.selectedIndex])
+    this.colorPicker.get('value')?.setValue(DEFAULT_COLOR)
 
   }
 

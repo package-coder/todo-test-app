@@ -1,4 +1,4 @@
-<div *ngIf="!fetching" class="row g-2">
+<div *ngIf="!fetching" class="row g-2">  
   <app-todo-card class="col-3" *ngFor="let todo of todos" [todo]="todo"/>
 </div>
 <div *ngIf="showArchives">
@@ -12,3 +12,8 @@
 <div *ngIf="fetching">
   Loading...
 </div>
+
+<div *ngIf="!fetching && todos?.length == 0" style="color: lightgrey;">
+  No data to display... Try creating one ➡
+</div>
+

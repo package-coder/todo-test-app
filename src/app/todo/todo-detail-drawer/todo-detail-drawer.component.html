@@ -1,13 +1,13 @@
 <div class="drawer">
   <div routerLink="/" class="drawer-overlay"></div>
-  <div class="shadow drawer-component px-5 py-5">
+  <div class="shadow drawer-component ps-5 pe-2 py-5">
     <div *ngIf="!loading" class="row flex-column justify-content-between h-100">
       <form
         class="row flex-column justify-content-between h-100"
         [formGroup]="form"
         (ngSubmit)="handleSubmit()"
       >
-        <div class="col">
+        <div class="col overflow-y-auto pe-3 pb-5">
           <h1 *ngIf="todo.isArchived" class="px-2" style="font-weight: 700; font-size: xx-large; color: lightgrey;">Archived</h1>
 
           <input
@@ -62,7 +62,7 @@
             *ngFor="let task of form.get('tasks')?.value; let i = index"
           >
             <div
-              [style.background-color]="task.color"
+              [style.background-color]="task?.color"
               class="col flex-grow-1 todo-task py-2 px-3 mb-1"
               (click)="completeTask(i)"
             >
@@ -71,18 +71,18 @@
                   readonly
                   class="form-check-input rounded-circle"
                   type="checkbox"
-                  [checked]="task.isCompleted"
+                  [checked]="task?.isCompleted"
                   style="cursor: pointer"
                 />
               </div>
               <div
                 [class]="
-                  task.isCompleted
+                  task?.isCompleted
                     ? 'todo-task-complete'
                     : 'todo-task-incomplete'
                 "
               >
-                {{ task.name }}
+                {{ task?.name }}
               </div>
             </div>
             <div class="delete-hide col-1 px-0 ms-3" style="display: none">
@@ -109,7 +109,7 @@
               "
             >
               <div
-                [style.background-color]="task.color"
+                [style.background-color]="task?.color"
                 class="col flex-grow-1 todo-task archived-task py-2 px-3 mb-1"
               >
                 <div class="form-check me-3">
@@ -117,18 +117,18 @@
                     disabled
                     class="form-check-input rounded-circle"
                     type="checkbox"
-                    [checked]="task.isCompleted"
+                    [checked]="task?.isCompleted"
                     style="cursor: pointer"
                   />
                 </div>
                 <div
                   [class]="
-                    task.isCompleted
+                    task?.isCompleted
                       ? 'todo-task-complete'
                       : 'todo-task-incomplete'
                   "
                 >
-                  {{ task.name }}
+                  {{ task?.name }}
                 </div>
               </div>
               <div class="col-1 px-0 ms-3">
@@ -144,7 +144,7 @@
           </div>
         </div>
 
-        <div class="col-1 w-100">
+        <div class="col-1 w-100 pt-3">
           <footer class="row align-items-center justify-content-between w-100">
             <div class="col-3">
               <button
@@ -170,7 +170,7 @@
                   class="shadow-sm btn btn-sm rounded me-2"
                   style="color: gray"
                 >
-                  {{ showArchivedTasks ? "Hide" : "Show" }} archives
+                   ({{ form.get('archivedTasks')?.value?.length }}) {{ showArchivedTasks ? "Hide" : "Show" }} archived
                 </button>
 
                 <button

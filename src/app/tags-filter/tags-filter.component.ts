@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Tag } from 'src/interfaces/tag.inteface';
 
 @Component({
   selector: 'app-tags-filter',
@@ -8,20 +9,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class TagsFilterComponent implements OnInit {
 
-  @Input() defaultValues: any = [];
+  @Input() defaultValues?: Tag[] = [];
   @Input() readOnly: boolean = false;
 
-  selectedTagId: any
+  selectedTagId?: number
 
   constructor(private route: ActivatedRoute, private router: Router) { }
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
       const tagId = params.get('tag')
-      this.selectedTagId = tagId
+      this.selectedTagId = tagId ? Number(tagId) : undefined
     });
   }
 
-  onClick(tag?: any) {
+  onClick(tag: Tag) {
     
     const queryParams = tag && this.selectedTagId != tag.id ? {
       tag: tag.id
