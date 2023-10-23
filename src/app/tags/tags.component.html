@@ -8,11 +8,11 @@
       type="button"
       class="shadow-sm btn btn-sm rounded me-1"
     >
-      {{ tag?.name }}
+      #{{ tag?.name }}
     </button>
   </div>
   <button
-    *ngIf="!toggleAddTag"
+    *ngIf="!toggleAddTag && !readOnly"
     type="button"
     (click)="toggleAdd()"
     class="shadow-sm btn btn-sm rounded"

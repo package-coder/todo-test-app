@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit, forwardRef } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { snakeCase } from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
+import { TagService } from 'src/services/tag.service';
 
 @Component({
   selector: 'app-tags',
@@ -24,12 +26,14 @@ export class TagsComponent implements OnInit, ControlValueAccessor, Validator, O
   destroySubject = new Subject<void>();
 
   @Input() defaultValues: any = [];
+  @Input() readOnly: boolean = false;
+  
   tagSelectorForm = new FormGroup({
     values: new FormArray<FormControl>([], Validators.minLength(1))
   })
   toggleAddTag: boolean = false
 
-  constructor() {}
+  constructor(private route: ActivatedRoute, private tagService: TagService) {}
   ngOnInit() {
     const tags = this.tagSelectorForm.get('values') as FormArray
     this.defaultValues.forEach((value: any) => tags.push(new FormControl(value)))
@@ -42,13 +46,22 @@ export class TagsComponent implements OnInit, ControlValueAccessor, Validator, O
 
   addTag(e: any) {
     const tags = this.tagSelectorForm.get('values') as FormArray
+    const todoId = Number(this.route.snapshot.params['id'])
     
     if(e?.keyCode == 13) {
       e?.preventDefault()
-      const value = e?.target?.value;
+      let value = e?.target?.value;
       if(!value) return;
       if(!tags?.value.some((data: string) => data === snakeCase(value))) {
-        tags.push(new FormControl({ name: snakeCase(value) }))
+
+        const data = { name: snakeCase(value) }
+        if(todoId) {
+          this.tagService
+          .addTodoTag(todoId, data)
+          .subscribe(data => tags.push(new FormControl(data)))
+        } else {
+          tags.push(new FormControl(data))
+        }
         e.target.value = ''
       }
       this.toggleAdd()
@@ -56,7 +69,16 @@ export class TagsComponent implements OnInit, ControlValueAccessor, Validator, O
   }
 
   removeTag(index: number) {
+    if(this.readOnly) return;
     const tags = this.tagSelectorForm.get('values') as FormArray
+    const todoId = Number(this.route.snapshot.params['id'])
+
+    const tag = tags.at(index).value
+
+    if(todoId && tag?.id) {
+      this.tagService.untagTodo(todoId, tag.id).subscribe()
+    }
+
     tags.removeAt(index)
   }
 
