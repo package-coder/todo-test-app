@@ -218,6 +218,10 @@
         </div>
       </form>
     </div>
-    <div *ngIf="loading">Loading...</div>
+    <div *ngIf="loading && !error">Loading...</div>
+    <div *ngIf="error" style="color: lightgrey;">
+      ❌  No todo is found...
+    </div>
+    
   </div>
 </div>

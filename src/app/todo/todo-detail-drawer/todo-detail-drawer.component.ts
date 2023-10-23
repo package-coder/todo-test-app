@@ -26,6 +26,7 @@ export class TodoDetailDrawerComponent implements OnInit {
 
   loading: boolean = false;
   submitting: boolean = false;
+  error?: string;
 
   todo: any
   form = new FormGroup<TodoFormType>({
@@ -54,11 +55,11 @@ export class TodoDetailDrawerComponent implements OnInit {
     const tasksForm = this.form.get('tasks') as TodoFormType['tasks']
     const archivedTasksForm = this.form.get('archivedTasks') as TodoFormType['tasks']
 
-    const tasks = data.tasks?.filter((task: any) => !task.isArchived)
-    const archivedTasks = data.tasks?.filter((task: any) => task.isArchived)
+    const tasks = data.tasks?.filter((task: Task) => !task.isArchived)
+    const archivedTasks = data.tasks?.filter((task: Task) => task.isArchived)
 
-    tasks?.forEach((task: any) => tasksForm?.push(new FormControl(task)))
-    archivedTasks?.forEach((task: any) => archivedTasksForm?.push(new FormControl(task)))
+    tasks?.forEach((task: Task) => tasksForm?.push(new FormControl(task) as TaskFormControl))
+    archivedTasks?.forEach((task: Task) => archivedTasksForm?.push(new FormControl(task) as TaskFormControl))
 
     this.form.get('name')?.setValue(data.name)
     this.form.get('tagSelector')?.setValue({ values: data.tags || null })
@@ -73,7 +74,7 @@ export class TodoDetailDrawerComponent implements OnInit {
     this.todoService?.getTodo(todoId)
       .subscribe(
         data => this.updateForm(data),
-        null,
+        error => this.error = error,
         () => this.loading = false
       )
   }
