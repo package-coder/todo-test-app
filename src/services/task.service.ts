@@ -17,4 +17,8 @@ export class TaskService {
     return this.client.patch<any>(url, task);
   }
 
+  addTodoTask(todoId: number, task: any): Observable<any> {
+    const url = `${env.API_BASE_URL}/${env.API_PATHS.TASK}/todo/${todoId}`
+    return this.client.post<any>(url, task);
+  }
 }
