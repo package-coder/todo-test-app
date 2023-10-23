@@ -1,0 +1,22 @@
+<div class="d-flex flex-row align-items-center flex-wrap">
+  
+  <div *ngFor="let tag of defaultValues; let i = index">
+    <button
+      *ngIf="selectedTagId == tag.id"
+      routerLink="/"
+      type="button"
+      class="shadow-sm btn btn-sm rounded me-1 btn-primary"
+    >
+      #{{ tag?.name }}
+    </button>
+    <button
+      *ngIf="selectedTagId != tag.id"
+      (click)="onClick(tag)"
+      type="button"
+      class="shadow-sm btn btn-sm rounded me-1"
+    >
+      #{{ tag?.name }}
+    </button>
+  </div>
+
+</div>

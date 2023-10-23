@@ -51,7 +51,7 @@ export class TodoDetailDrawerComponent implements OnInit {
     this.form.get('tagSelector')?.setValue({ values: data.tags })
     this.todo = {
       ...data,
-      createdAt: moment(data?.createdAt).format('dddd, MMMM DD')
+      createdAtFormatted: moment(data?.createdAt).format('dddd, MMMM DD')
     }
   }
 
@@ -76,12 +76,11 @@ export class TodoDetailDrawerComponent implements OnInit {
       const value = e?.target?.value;
       if (!value) return;
 
-      tasks.push(new FormControl({ name: value, isCompleted: false }))
       taskInput.setValue('')
 
-      this.todoService
-        .addTaskToTodo(todoId, { name: value, isCompleted: false })
-        .subscribe(() => this.fetchTodo(todoId))
+      this.taskService
+        .addTodoTask(todoId, { name: value, isCompleted: false })
+        .subscribe(data => tasks.push(new FormControl(data)))
     }
   }
 
@@ -132,7 +131,7 @@ export class TodoDetailDrawerComponent implements OnInit {
   handleArchiveTodo() {
     const todoId = Number(this.route.snapshot.params['id'])
 
-    this.todoService.updateTodo(todoId, { ...this.todo, isArchived: true })
+    this.todoService.archiveTodo(todoId, !this.todo.isArchived)
       .subscribe(
         () => {
           this.handleToggleArchive()
@@ -146,17 +145,14 @@ export class TodoDetailDrawerComponent implements OnInit {
   }
 
   handleSubmit() {
-    console.log(this.form)
-    // this.submitting = true
+    this.submitting = true
+    const todoId = Number(this.route.snapshot.params['id'])
 
-    // const value = {
-    //   ...omit(this.form.value, ['task', 'tasks']),
-    //   createdAt: moment().toISOString()
-    // }
-    // this.todoService.saveTodo(value)
-    //   .subscribe(() => {
-    //     this.submitting = false
-    //     this.router.navigate(['/'], { queryParams: { "refresh": true } })
-    //   })
+    let data = this.form.value;
+    this.todoService.updateTodo(todoId, { name: data.name, createdAt: this.todo.createdAt })
+      .subscribe(() => {
+        this.submitting = false
+        this.router.navigate(['/'], { queryParams: { "refresh": true } })
+      })
   }
 }
